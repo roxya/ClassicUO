@@ -114,24 +114,46 @@ namespace ClassicUO.Game.Scenes
 
             };
 
+        private Point[] _waypoints2 =
+        {
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(-1, 1),
+                new Point(0, 1),
+                new Point(1, 1),
+                new Point(0, 1),
+                new Point(1, 0),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1)
+        };
+
         private int waypointId = 0;
 
         private void MoveCharacterInPattern()
         {
 
             currentPoint = new Point(World.Player.X, World.Player.Y);
+            //if (World.Player.Steps.Count == 0)
+            //{
+            //    currentPoint = new Point(World.Player.Steps.Back().X, World.Player.Steps.Back().Y);
+            //}
 
             if(currentPoint != lastPoint)
             {
                 waypointId++;
-                if (waypointId == _waypoints.Length)
+                if (waypointId == _waypoints2.Length)
                 {
+                    _runningTestPattern = false;
                     waypointId = 0;
                 }
             }
 
             lastPoint = currentPoint;
-            Point next = new Point(World.Player.X + _waypoints[waypointId].X, World.Player.Y + _waypoints[waypointId].Y);
+            //Point next = new Point(World.Player.X + _waypoints[waypointId].X, World.Player.Y + _waypoints[waypointId].Y);
+            Point next = new Point(currentPoint.X + _waypoints2[waypointId].X, currentPoint.Y + _waypoints2[waypointId].Y);
             Direction mydir = DirectionHelper.DirectionFromPoints(currentPoint, next);
             World.Player.Walk(mydir, true);
         }
