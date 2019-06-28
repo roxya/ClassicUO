@@ -197,6 +197,7 @@ namespace ClassicUO.Game.Scenes
 
             if (e.Text == "go")
             {
+                waypointId = 0;
                 _runningTestPattern = true;
             }
             if(e.Text == "stop")
@@ -542,6 +543,8 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
+            //_runningTestPattern = true;
+
             if (_rightMousePressed || _continueRunning)
                 MoveCharacterByMouseInput();
             else if (!Engine.Profile.Current.DisableArrowBtn || _isMacroMoveDown)
@@ -551,7 +554,7 @@ namespace ClassicUO.Game.Scenes
                 else if (_numPadKeyPressed)
                     MoveCharacterByKeyboardInput(true);
             }
-            else if(_runningTestPattern)
+            if(_runningTestPattern)
             {
                 MoveCharacterInPattern();
             }

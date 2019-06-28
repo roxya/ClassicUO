@@ -63,6 +63,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         //experimental
         private Checkbox _enableSelectionArea, _debugGumpIsDisabled, _restoreLastGameSize, _autoOpenDoors, _autoOpenCorpse, _disableTabBtn, _disableCtrlQWBtn, _disableDefaultHotkeys, _disableArrowBtn, _openContainersNearRealPosition;
+        private TextBox _turndelay;
 
         // sounds
         private Checkbox _enableSounds, _enableMusic, _footStepsSound, _combatMusic, _musicInBackground, _loginMusic;
@@ -1065,6 +1066,19 @@ namespace ClassicUO.Game.UI.Gumps
 
             _openContainersNearRealPosition = CreateCheckBox(rightArea, "Containers open near their point of origin", Engine.Profile.Current.OpenContainersNearRealPosition, 0, 0);
 
+            ScrollAreaItem sai = new ScrollAreaItem();
+            _turndelay = CreateInputField(sai, new TextBox(FONT, 5, 80, 80)
+            {
+                X = 20,
+                Y = 100,
+                Width = 50,
+                Height = 30,
+                NumericOnly = true,
+                Text = Engine.Profile.Current.turndelay.ToString()
+            }, "Turn Delay");
+
+            rightArea.Add(sai);
+
             Add(rightArea, PAGE);
 
             _autoOpenCorpseArea.IsVisible = _autoOpenCorpse.IsChecked;
@@ -1247,6 +1261,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _spellColoringCheckbox.IsChecked = false;
                     _spellFormatCheckbox.IsChecked = false;
 
+
                     break;
 
                 case 9:
@@ -1271,6 +1286,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _enableDragSelect.IsChecked = false;
                     _openContainersNearRealPosition.IsChecked = false;
                     _dragSelectHumanoidsOnly.IsChecked = false;
+                    _turndelay.Text = "100";
 
                     break;
 
@@ -1630,6 +1646,7 @@ namespace ClassicUO.Game.UI.Gumps
             Engine.Profile.Current.AutoOpenDoors = _autoOpenDoors.IsChecked;
             Engine.Profile.Current.AutoOpenCorpses = _autoOpenCorpse.IsChecked;
             Engine.Profile.Current.AutoOpenCorpseRange = int.Parse(_autoOpenCorpseRange.Text);
+            Engine.Profile.Current.turndelay = int.Parse(_turndelay.Text);
             Engine.Profile.Current.CorpseOpenOptions = _autoOpenCorpseOptions.SelectedIndex;
 
             Engine.Profile.Current.EnableDragSelect = _enableDragSelect.IsChecked;

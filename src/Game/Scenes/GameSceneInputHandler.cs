@@ -120,8 +120,8 @@ namespace ClassicUO.Game.Scenes
 
             lastPoint = currentPoint;
             Point next = new Point(World.Player.X + _waypoints[waypointId].X, World.Player.Y + _waypoints[waypointId].Y);
-            Direction dir = DirectionHelper.DirectionFromPoints(currentPoint, next);
-            World.Player.Walk(dir, true);
+            Direction mydir = DirectionHelper.DirectionFromPoints(currentPoint, next);
+            World.Player.Walk(mydir, true);
         }
 
         private void MoveCharacterByMouseInput()

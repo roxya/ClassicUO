@@ -172,6 +172,8 @@ namespace ClassicUO.Configuration
 
         [JsonProperty] public int MaxFPS { get; set; } = 60;
 
+        public int turndelay { get; set; } = 100;
+
         [JsonProperty]
         public Macro[] Macros { get; set; } =
         {
