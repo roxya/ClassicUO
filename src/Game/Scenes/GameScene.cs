@@ -66,6 +66,8 @@ namespace ClassicUO.Game.Scenes
 
         public bool UpdateDrawPosition { get; set; }
 
+        private bool _runningTestPattern;
+
         private int ScalePos
         {
             get => _scale;
@@ -192,6 +194,15 @@ namespace ClassicUO.Game.Scenes
             string text;
 
             Hue hue = e.Hue;
+
+            if (e.Text == "go")
+            {
+                _runningTestPattern = true;
+            }
+            if(e.Text == "stop")
+            {
+                _runningTestPattern = false;
+            }
 
             switch (e.Type)
             {
@@ -539,6 +550,10 @@ namespace ClassicUO.Game.Scenes
                     MoveCharacterByKeyboardInput(false);
                 else if (_numPadKeyPressed)
                     MoveCharacterByKeyboardInput(true);
+            }
+            else if(_runningTestPattern)
+            {
+                MoveCharacterInPattern();
             }
 
             if (_followingMode && _followingTarget.IsMobile && !Pathfinder.AutoWalking)

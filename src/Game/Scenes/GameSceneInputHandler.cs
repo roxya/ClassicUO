@@ -86,7 +86,43 @@ namespace ClassicUO.Game.Scenes
         public bool IsMouseOverUI => Engine.UI.IsMouseOverAControl && !(Engine.UI.MouseOverControl is WorldViewport);
         public bool IsMouseOverViewport => Engine.UI.MouseOverControl is WorldViewport;
 
+        private Point currentPoint;
+        private Point lastPoint;
 
+        private static readonly Point[] _waypoints =
+        {
+            new Point(1, 0),
+            new Point(1, 1),
+            new Point(0, 1),
+            new Point(-1, 1),
+            new Point(-1, 0),
+            new Point(-1, -1),
+            new Point(0, -1),
+            new Point(1, -1)
+        };
+
+        private int waypointId = 0;
+
+
+
+        private void MoveCharacterInPattern()
+        {
+            currentPoint = new Point(World.Player.X, World.Player.Y);
+
+            if(currentPoint != lastPoint)
+            {
+                waypointId++;
+                if (waypointId == _waypoints.Length)
+                {
+                    waypointId = 0;
+                }
+            }
+
+            lastPoint = currentPoint;
+            Point next = new Point(World.Player.X + _waypoints[waypointId].X, World.Player.Y + _waypoints[waypointId].Y);
+            Direction dir = DirectionHelper.DirectionFromPoints(currentPoint, next);
+            World.Player.Walk(dir, true);
+        }
 
         private void MoveCharacterByMouseInput()
         {
