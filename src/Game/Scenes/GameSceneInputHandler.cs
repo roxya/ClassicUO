@@ -89,24 +89,36 @@ namespace ClassicUO.Game.Scenes
         private Point currentPoint;
         private Point lastPoint;
 
-        private static readonly Point[] _waypoints =
+        //private Point[] _waypoints =
+        //{
+        //    new Point(1, 0),
+        //    new Point(1, 1),
+        //    new Point(0, 1),
+        //    new Point(-1, 1),
+        //    new Point(-1, 0),
+        //    new Point(-1, -1),
+        //    new Point(0, -1),
+        //    new Point(1, -1)
+        //};
+
+        private Point[] _waypoints =
         {
-            new Point(1, 0),
-            new Point(1, 1),
-            new Point(0, 1),
-            new Point(-1, 1),
-            new Point(-1, 0),
-            new Point(-1, -1),
-            new Point(0, -1),
-            new Point(1, -1)
-        };
+                new Point(1, 0),
+                new Point(1, 0),
+                new Point(0, 1),
+                new Point(0, 1),
+                new Point(-1, 0),
+                new Point(-1, 0),
+                new Point(0, -1),
+                new Point(0, -1)
+
+            };
 
         private int waypointId = 0;
 
-
-
         private void MoveCharacterInPattern()
         {
+
             currentPoint = new Point(World.Player.X, World.Player.Y);
 
             if(currentPoint != lastPoint)
