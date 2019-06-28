@@ -38,7 +38,7 @@ using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework;
 
 using SDL2;
-
+using static ClassicUO.Game.GameObjects.Mobile;
 using MathHelper = ClassicUO.Utility.MathHelper;
 
 namespace ClassicUO.Game.Scenes
@@ -130,7 +130,21 @@ namespace ClassicUO.Game.Scenes
                 new Point(1, 1)
         };
 
+        private Direction[] _moveDirections =
+        {
+            Direction.East,
+            Direction.East,
+            Direction.South,
+            Direction.South,
+            Direction.West,
+            Direction.West,
+            Direction.North,
+            Direction.North
+        };
+
         private int waypointId = 0;
+
+        private long LastStepTime = 0;
 
         private void MoveCharacterInPattern()
         {
@@ -157,6 +171,124 @@ namespace ClassicUO.Game.Scenes
             Direction mydir = DirectionHelper.DirectionFromPoints(currentPoint, next);
             World.Player.Walk(mydir, true);
         }
+
+        private void MoveCharacterInPattern2()
+        {
+            Direction mydir = _moveDirections[waypointId];
+            currentPoint = World.RangeSize;
+            if (currentPoint == lastPoint)
+            {
+                if (World.Player.Steps.Count == 0)
+                    World.Player.Walk(mydir, true);
+            }
+            else
+            {
+                waypointId++;
+                if (waypointId == _moveDirections.Length)
+                {
+                    waypointId = 0;
+                }
+                mydir = _moveDirections[waypointId];
+                lastPoint = currentPoint;
+                World.Player.Walk(mydir, true);
+            }
+            
+        }
+
+        private void MoveCharacterInPattern3()
+        {
+            Direction mydir = _moveDirections[waypointId];
+            if (LastStepTime < (Engine.Ticks - 150))
+            {
+                World.Player.Walk(mydir, true);
+                waypointId++;
+                if (waypointId == _moveDirections.Length)
+                {
+                    waypointId = 0;
+                }
+                LastStepTime = Engine.Ticks;
+            }
+            else
+            {
+                World.Player.Walk(mydir, true);
+            }
+
+        }
+
+        public static void GetNewXY(byte direction, ref int x, ref int y)
+        {
+            switch (direction & 7)
+            {
+                case 0:
+
+                    {
+                        y--;
+
+                        break;
+                    }
+
+                case 1:
+
+                    {
+                        x++;
+                        y--;
+
+                        break;
+                    }
+
+                case 2:
+
+                    {
+                        x++;
+
+                        break;
+                    }
+
+                case 3:
+
+                    {
+                        x++;
+                        y++;
+
+                        break;
+                    }
+
+                case 4:
+
+                    {
+                        y++;
+
+                        break;
+                    }
+
+                case 5:
+
+                    {
+                        x--;
+                        y++;
+
+                        break;
+                    }
+
+                case 6:
+
+                    {
+                        x--;
+
+                        break;
+                    }
+
+                case 7:
+
+                    {
+                        x--;
+                        y--;
+
+                        break;
+                    }
+            }
+        }
+
 
         private void MoveCharacterByMouseInput()
         {

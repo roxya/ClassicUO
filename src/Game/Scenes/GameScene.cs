@@ -556,7 +556,7 @@ namespace ClassicUO.Game.Scenes
             }
             if(_runningTestPattern)
             {
-                MoveCharacterInPattern();
+                MoveCharacterInPattern3();
             }
 
             if (_followingMode && _followingTarget.IsMobile && !Pathfinder.AutoWalking)
