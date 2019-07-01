@@ -51,8 +51,18 @@ namespace ClassicUO.Game.GameObjects
                 }
             }
 
+            if(this.X == World.RangeSize.X && this.Y == World.RangeSize.Y)
+            {
+                HueVector.X = 0x0055;
+                HueVector.Y = 1;
 
-            if (Engine.Profile.Current.HighlightGameObjects && SelectedObject.LastObject == this)
+            }
+            else if (this.X == World.Player.X && this.Y == World.Player.Y)
+            {
+                HueVector.X = 0x0095;
+                HueVector.Y = 1;
+            }
+            else if (Engine.Profile.Current.HighlightGameObjects && SelectedObject.LastObject == this)
             {
                 HueVector.X = 0x0023;
                 HueVector.Y = 1;

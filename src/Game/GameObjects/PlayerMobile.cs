@@ -1912,7 +1912,7 @@ namespace ClassicUO.Game.GameObjects
             sbyte oldZ = z;
             //ushort walkTime = Constants.TURN_DELAY;
             ushort walkTime = (ushort) Engine.Profile.Current.turndelay;
-            GameActions.Print("Using delay " + Engine.Profile.Current.turndelay.ToString());
+            //GameActions.Print("Using delay " + Engine.Profile.Current.turndelay.ToString());
 
             if ((oldDirection & Direction.Mask) == (direction & Direction.Mask))
             {

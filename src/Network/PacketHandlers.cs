@@ -2788,8 +2788,12 @@ namespace ClassicUO.Network
                 case 1: // fast walk prevention
 
 #if !JAEDAN_MOVEMENT_PATCH && !MOVEMENT2
-
-                    for (int i = 0; i < 6; i++) World.Player.Walker.FastWalkStack.SetValue(i, p.ReadUInt());
+                    GameActions.Print("Fastwalk extended command 1");
+                    for (int i = 0; i < 6; i++)
+                    {
+                        World.Player.Walker.FastWalkStack.SetValue(i, p.ReadUInt());
+                        GameActions.Print("Setting fastwalk value");
+                    }
 #endif
                     break;
 
@@ -2797,6 +2801,7 @@ namespace ClassicUO.Network
                 //===========================================================================================
                 case 2: // add key to fast walk stack
 #if !JAEDAN_MOVEMENT_PATCH && !MOVEMENT2
+                    GameActions.Print("Fastwalk extended command 2");
                     World.Player.Walker.FastWalkStack.AddValue(p.ReadUInt());
 #endif
                     break;

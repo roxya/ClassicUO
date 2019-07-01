@@ -124,6 +124,7 @@ namespace ClassicUO.Game.Managers
 
         public void ConfirmWalk(byte sequence)
         {
+            
             if (UnacceptedPacketsCount != 0)
                 UnacceptedPacketsCount--;
 
@@ -142,14 +143,17 @@ namespace ClassicUO.Game.Managers
 
             if (!isBadStep)
             {
+                
                 if (stepIndex >= CurrentWalkSequence)
                 {
+                    GameActions.Print("ConfirmWalk " + StepInfos[stepIndex].X + " " + StepInfos[stepIndex].Y + " " + Engine.Ticks.ToString());
                     StepInfos[stepIndex].Accepted = true;
                     World.RangeSize.X = StepInfos[stepIndex].X;
                     World.RangeSize.Y = StepInfos[stepIndex].Y;
                 }
                 else if (stepIndex == 0)
                 {
+                    GameActions.Print("ConfirmWalk " + StepInfos[0].X + " " + StepInfos[0].Y + " " + Engine.Ticks.ToString());
                     World.RangeSize.X = StepInfos[0].X;
                     World.RangeSize.Y = StepInfos[0].Y;
 

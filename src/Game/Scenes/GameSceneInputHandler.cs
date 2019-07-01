@@ -150,11 +150,6 @@ namespace ClassicUO.Game.Scenes
         {
 
             currentPoint = new Point(World.Player.X, World.Player.Y);
-            //if (World.Player.Steps.Count == 0)
-            //{
-            //    currentPoint = new Point(World.Player.Steps.Back().X, World.Player.Steps.Back().Y);
-            //}
-
             if(currentPoint != lastPoint)
             {
                 waypointId++;
@@ -166,7 +161,6 @@ namespace ClassicUO.Game.Scenes
             }
 
             lastPoint = currentPoint;
-            //Point next = new Point(World.Player.X + _waypoints[waypointId].X, World.Player.Y + _waypoints[waypointId].Y);
             Point next = new Point(currentPoint.X + _waypoints2[waypointId].X, currentPoint.Y + _waypoints2[waypointId].Y);
             Direction mydir = DirectionHelper.DirectionFromPoints(currentPoint, next);
             World.Player.Walk(mydir, true);
