@@ -64,7 +64,7 @@ namespace ClassicUO.Game.UI.Gumps
         private TextBox _rows, _columns, _highlightAmount, _abbreviatedAmount;
 
         //experimental
-        private Checkbox _enableSelectionArea, _debugGumpIsDisabled, _restoreLastGameSize, _autoOpenDoors, _autoOpenCorpse, _disableTabBtn, _disableCtrlQWBtn, _disableDefaultHotkeys, _disableArrowBtn, _overrideContainerLocation, _smoothDoors, _showTargetRangeIndicator;
+        private Checkbox _enableSelectionArea, _debugGumpIsDisabled, _restoreLastGameSize, _autoOpenDoors, _autoOpenCorpse, _disableTabBtn, _disableCtrlQWBtn, _disableDefaultHotkeys, _disableArrowBtn, _overrideContainerLocation, _smoothDoors, _showTargetRangeIndicator, _persistHealthBars;
         private Combobox _overrideContainerLocationSetting;
 
         // sounds
@@ -1207,6 +1207,14 @@ namespace ClassicUO.Game.UI.Gumps
 
             rightArea.Add(_showTargetRangeIndicator);
 
+            _persistHealthBars = new Checkbox(0x00D2, 0x00D3, "Save health bars on logout", FONT, HUE_FONT, true)
+            {
+                IsChecked = Engine.Profile.Current.PersistHealthbarGumps,
+            };
+
+            rightArea.Add(_persistHealthBars);
+
+
             Add(rightArea, PAGE);
 
             _autoOpenCorpseArea.IsVisible = _autoOpenCorpse.IsChecked;
@@ -1427,6 +1435,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _overrideContainerLocationSetting.SelectedIndex = 0;
                     _dragSelectHumanoidsOnly.IsChecked = false;
                     _showTargetRangeIndicator.IsChecked = false;
+                    _persistHealthBars.IsChecked = false;
 
                     break;
 
@@ -1814,6 +1823,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             Engine.Profile.Current.OverrideContainerLocation = _overrideContainerLocation.IsChecked;
             Engine.Profile.Current.OverrideContainerLocationSetting = _overrideContainerLocationSetting.SelectedIndex;
+            Engine.Profile.Current.PersistHealthbarGumps = _persistHealthBars.IsChecked;
 
             Engine.Profile.Current.ShowTargetRangeIndicator = _showTargetRangeIndicator.IsChecked;
 

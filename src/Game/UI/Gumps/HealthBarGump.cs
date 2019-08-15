@@ -129,6 +129,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             bool inparty = World.Party.Contains(LocalSerial);
 
+            CanBeSaved = Engine.Profile.Current.PersistHealthbarGumps || LocalSerial == World.Player;
 
             Hue textColor = 0x0386;
             Hue hitsColor = 0x0386;
@@ -303,7 +304,7 @@ namespace ClassicUO.Game.UI.Gumps
                 }
 
 
-                if ( (inparty || CanBeSaved) && mobile != null)
+                if ( (inparty || LocalSerial == World.Player) && mobile != null)
                 {
                     int mana = CalculatePercents(mobile.ManaMax, mobile.Mana, barW);
                     int stam = CalculatePercents(mobile.StaminaMax, mobile.Stamina, barW);
@@ -331,7 +332,7 @@ namespace ClassicUO.Game.UI.Gumps
                 }
             }
 
-            if (CanBeSaved)
+            if (LocalSerial == World.Player)
             {
                 if (World.Player.InWarMode != _oldWarMode)
                 {
@@ -380,26 +381,43 @@ namespace ClassicUO.Game.UI.Gumps
         public override void Save(BinaryWriter writer)
         {
             base.Save(writer);
+            writer.Write((uint) 0);
             writer.Write(LocalSerial);
+            writer.Write(_name);
         }
 
         public override void Restore(BinaryReader reader)
         {
             base.Restore(reader);
+
             LocalSerial = reader.ReadUInt32();
+
+            if(LocalSerial == 0)
+            {
+                LocalSerial = reader.ReadUInt32();
+                _name = reader.ReadString();
+            }
 
             if (LocalSerial == World.Player)
             {
                 _name = World.Player.Name;
                 BuildGump();
+                return;
+            }
+
+            if (Engine.Profile.Current.PersistHealthbarGumps)
+            {
+                BuildGump();
             }
             else
+            {
                 Dispose();
+            }
         }
 
         private void BuildGump()
         {
-            CanBeSaved = LocalSerial == World.Player;
+            CanBeSaved = Engine.Profile.Current.PersistHealthbarGumps || LocalSerial == World.Player;
 
             WantUpdateSize = false;
 
@@ -415,7 +433,7 @@ namespace ClassicUO.Game.UI.Gumps
                 Width = 115;
                 Height = 55;
 
-                if (CanBeSaved)
+                if (LocalSerial == World.Player)
                 {
                     Add(_textBox = new TextBox(3, width: 120, isunicode: false, style: FontStyle.Fixed, hue: 0x0386)
                     {
@@ -451,7 +469,7 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else
             {
-                if (CanBeSaved)
+                if (LocalSerial == World.Player)
                 {
                     _oldWarMode = World.Player.InWarMode;
                     Add(_background = new GumpPic(0, 0, _oldWarMode ? BACKGROUND_WAR : BACKGROUND_NORMAL, 0));
