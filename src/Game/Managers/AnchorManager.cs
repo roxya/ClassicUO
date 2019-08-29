@@ -127,13 +127,33 @@ namespace ClassicUO.Game.Managers
             return draggedControl.Location;
         }
 
-        public AnchorableGump GetAnchorableControlOver(Control draggedControl, int x, int y)
+        public Point GetCandidateDropLocation2(AnchorableGump draggedControl, AnchorableGump host)
         {
-            return Engine.UI.Gumps
-                         .OfType<AnchorableGump>()
-                         .FirstOrDefault(s => s != draggedControl && 
-                                              s.HitTest(draggedControl.ScreenCoordinateX + x,
-                                                        draggedControl.ScreenCoordinateY + y) != null);
+            if (host.AnchorGroupName == draggedControl.AnchorGroupName && this[draggedControl] == null)
+            {
+                Point? relativePosition = GetAnchorDirection2(draggedControl, host);
+
+                if (relativePosition.HasValue)
+                {
+                    if (this[host] == null || this[host].IsEmptyDirection(draggedControl, host, relativePosition.Value))
+                    {
+                        var offset = relativePosition.Value * new Point(host.GroupMatrixWidth, host.GroupMatrixHeight);
+
+                        return new Point(host.X + offset.X, host.Y + offset.Y);
+                    }
+                }
+            }
+
+            return draggedControl.Location;
+        }
+
+        public AnchorableGump GetAnchorableControlOver(AnchorableGump draggedControl, int x, int y)
+        {
+            //return Engine.UI.GetMouseOverControls(new Point(draggedControl.ScreenCoordinateX + x, draggedControl.ScreenCoordinateY + y))
+            //             .Where(o => o != draggedControl)
+            //             .OfType<AnchorableGump>()
+            //             .FirstOrDefault();
+            return CheckOverlap(draggedControl);
         }
 
         public void DetachControl(AnchorableGump control)
@@ -238,6 +258,31 @@ namespace ClassicUO.Game.Managers
             return null;
         }
 
+        private Point? GetAnchorDirection2(AnchorableGump draggedControl, AnchorableGump host)
+        {
+            int xdistancescale = Math.Abs(draggedControl.X - host.X) - host.Width;
+            int ydistancescale = Math.Abs(draggedControl.Y - host.Y) - host.Height;
+
+            if (xdistancescale > ydistancescale)
+            {
+                if (draggedControl.X > host.X)
+                    return new Point(1, 0);
+                else
+                    return new Point(-1, 0);
+            }
+            else
+            {
+                if (draggedControl.Y > host.Y)
+                    return new Point(0, 1);
+                else
+                    return new Point(0, -1);
+            }
+
+
+
+            return null;
+        }
+
         private bool IsPointInPolygon(Vector2[] polygon, Vector2 point)
         {
             bool isInside = false;
@@ -250,6 +295,35 @@ namespace ClassicUO.Game.Managers
             }
 
             return isInside;
+        }
+
+        public AnchorableGump CheckOverlap(AnchorableGump control)
+        {
+            var hosts = Engine.UI.Gumps.OfType<AnchorableGump>();
+            foreach (AnchorableGump host in hosts)
+            {
+                if (IsOverlapping(control, host))
+                {
+                    GameActions.Print("Overlap!");
+                    return host;
+                }
+            }
+
+            return null;
+        }
+
+        private bool IsOverlapping(AnchorableGump control, AnchorableGump host)
+        {
+            if (control == host)
+                return false;
+
+            if (control.Bounds.Top > host.Bounds.Bottom || control.Bounds.Bottom < host.Bounds.Top)
+                return false;
+
+            if (control.Bounds.Right < host.Bounds.Left || control.Bounds.Left > host.Bounds.Right)
+                return false;
+
+            return true;
         }
 
         public class AnchorGroup
@@ -492,6 +566,7 @@ namespace ClassicUO.Game.Managers
                     Console.WriteLine();
                 }
             }
+
         }
     }
 }

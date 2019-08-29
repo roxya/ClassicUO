@@ -47,6 +47,19 @@ namespace ClassicUO.Game.UI.Gumps
             _prevX = X;
             _prevY = Y;
 
+            AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this, 0, 0);
+
+            if (ctrl != null)
+            {
+                GameActions.Print("found a host");
+
+                Location = Engine.UI.AnchorManager.GetCandidateDropLocation2(this, ctrl);
+            }
+            else
+            {
+                Location = Mouse.Position;
+            }
+
             base.OnMove();
         }
 
@@ -81,7 +94,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnDragEnd(int x, int y)
         {
-            AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this, x, y);
+            AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this, 0, 0);
 
             if (ctrl != null)
             {
