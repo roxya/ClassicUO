@@ -732,6 +732,8 @@ namespace ClassicUO.Game.UI.Gumps
                                 return;
 
                             Engine.SceneManager.GetScene<GameScene>().Macros.RemoveMacro(control.Macro);
+
+                            Engine.UI.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == control.Macro)?.Dispose();
                         }
 
                         if (rightArea.Children.OfType<ScrollAreaItem>().All(s => s.IsDisposed)) _macroControl?.Dispose();
@@ -755,6 +757,18 @@ namespace ClassicUO.Game.UI.Gumps
                 });
 
                 nb.IsSelected = true;
+
+                nb.DragBegin += (sss, eee) =>
+                {
+                    if (Engine.UI.IsDragging)
+                        return;
+
+                    Engine.UI.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == macro)?.Dispose();
+
+                    MacroButtonGump macroButtonGump = new MacroButtonGump(macro, Mouse.Position.X, Mouse.Position.Y);
+                    Engine.UI.Add(macroButtonGump);
+                    Engine.UI.AttemptDragControl(macroButtonGump, new Point(Mouse.Position.X + (macroButtonGump.Width >> 1), Mouse.Position.Y + (macroButtonGump.Height >> 1)), true);
+                };
 
                 nb.MouseUp += (sss, eee) =>
                 {
