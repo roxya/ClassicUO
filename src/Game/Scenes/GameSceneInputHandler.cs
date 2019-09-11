@@ -130,16 +130,25 @@ namespace ClassicUO.Game.Scenes
                 new Point(1, 1)
         };
 
-        private Direction[] _moveDirections =
-        {
-            Direction.East,
-            Direction.East,
-            Direction.South,
-            Direction.South,
-            Direction.West,
-            Direction.West,
-            Direction.North,
-            Direction.North
+        private Point[] _waypoints2s =
+{
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(-1, 1),
+                new Point(0, 1),
+                new Point(1, 1),
+                new Point(0, 1),
+                new Point(1, 0),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1),
+                new Point(1, 1)
         };
 
         private int waypointId = 0;
@@ -155,7 +164,7 @@ namespace ClassicUO.Game.Scenes
                 waypointId++;
                 if (waypointId == _waypoints2.Length)
                 {
-                    _runningTestPattern = false;
+                    _runningTestPattern = _runningTestPatternStraight = false;
                     waypointId = 0;
                 }
             }
@@ -166,47 +175,24 @@ namespace ClassicUO.Game.Scenes
             World.Player.Walk(mydir, true);
         }
 
-        private void MoveCharacterInPattern2()
+        private void MoveCharacterInPatternStraight()
         {
-            Direction mydir = _moveDirections[waypointId];
-            currentPoint = World.RangeSize;
-            if (currentPoint == lastPoint)
-            {
-                if (World.Player.Steps.Count == 0)
-                    World.Player.Walk(mydir, true);
-            }
-            else
+
+            currentPoint = new Point(World.Player.X, World.Player.Y);
+            if (currentPoint != lastPoint)
             {
                 waypointId++;
-                if (waypointId == _moveDirections.Length)
+                if (waypointId == _waypoints2s.Length)
                 {
+                    _runningTestPattern = _runningTestPatternStraight = false;
                     waypointId = 0;
                 }
-                mydir = _moveDirections[waypointId];
-                lastPoint = currentPoint;
-                World.Player.Walk(mydir, true);
-            }
-            
-        }
-
-        private void MoveCharacterInPattern3()
-        {
-            Direction mydir = _moveDirections[waypointId];
-            if (LastStepTime < (Engine.Ticks - 150))
-            {
-                World.Player.Walk(mydir, true);
-                waypointId++;
-                if (waypointId == _moveDirections.Length)
-                {
-                    waypointId = 0;
-                }
-                LastStepTime = Engine.Ticks;
-            }
-            else
-            {
-                World.Player.Walk(mydir, true);
             }
 
+            lastPoint = currentPoint;
+            Point next = new Point(currentPoint.X + _waypoints2s[waypointId].X, currentPoint.Y + _waypoints2s[waypointId].Y);
+            Direction mydir = DirectionHelper.DirectionFromPoints(currentPoint, next);
+            World.Player.Walk(mydir, true);
         }
 
         public static void GetNewXY(byte direction, ref int x, ref int y)

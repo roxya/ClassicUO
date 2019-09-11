@@ -66,7 +66,7 @@ namespace ClassicUO.Game.Scenes
 
         public bool UpdateDrawPosition { get; set; }
 
-        private bool _runningTestPattern;
+        private bool _runningTestPattern, _runningTestPatternStraight;
 
         private int ScalePos
         {
@@ -200,9 +200,14 @@ namespace ClassicUO.Game.Scenes
                 waypointId = 0;
                 _runningTestPattern = true;
             }
+            if(e.Text == "go straight")
+            {
+                waypointId = 0;
+                _runningTestPatternStraight = true;
+            }
             if(e.Text == "stop")
             {
-                _runningTestPattern = false;
+                _runningTestPattern = _runningTestPatternStraight = false;
             }
 
             switch (e.Type)
@@ -554,9 +559,13 @@ namespace ClassicUO.Game.Scenes
                 else if (_numPadKeyPressed)
                     MoveCharacterByKeyboardInput(true);
             }
-            if(_runningTestPattern)
+            if (_runningTestPattern)
             {
                 MoveCharacterInPattern();
+            }
+            else if (_runningTestPatternStraight)
+            {
+                MoveCharacterInPatternStraight();
             }
 
             if (_followingMode && _followingTarget.IsMobile && !Pathfinder.AutoWalking)
