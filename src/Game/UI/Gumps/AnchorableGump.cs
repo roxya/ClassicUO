@@ -23,6 +23,7 @@
 
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Input;
+using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -31,6 +32,7 @@ namespace ClassicUO.Game.UI.Gumps
         private GumpPic _lockGumpPic;
         private int _prevX, _prevY;
         private AnchorableGump _anchorCandidate;
+        private Point _dragStart;
 
         public AnchorableGump(Serial local, Serial server) : base(local, server)
         {
@@ -64,30 +66,39 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMouseOver(int x, int y)
         {
-            // Am I using anchor candidate stuff? dunno
-            _anchorCandidate = null;
+
             if (Engine.UI.IsDragging && Engine.UI.DraggingControl == this)
             {
                 AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this);
-                
+
                 if (ctrl != null)
                 {
                     Location = Engine.UI.AnchorManager.GetCandidateDropLocation(this, ctrl);
                     _anchorCandidate = ctrl;
+                }
+                else if(_anchorCandidate != null)
+                {
+                    _anchorCandidate = null;
+                    Location = Mouse.Position - _dragStart;
                 }
             }
 
             base.OnMouseOver(x, y);
         }
 
+        protected override void OnDragBegin(int x, int y)
+        {
+            _dragStart = Mouse.Position - Location;
+
+            base.OnDragBegin(x, y);
+        }
+
         protected override void OnDragEnd(int x, int y)
         {
-            AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this);
-
-            //if (ctrl != null)
             if (_anchorCandidate != null)
             {
                 Engine.UI.AnchorManager.DropControl(this, _anchorCandidate);
+                _anchorCandidate = null;
             }
 
             base.OnDragEnd(x, y);

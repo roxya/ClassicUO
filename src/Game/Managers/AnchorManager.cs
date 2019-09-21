@@ -117,7 +117,7 @@ namespace ClassicUO.Game.Managers
                 {
                     if (this[host] == null || this[host].IsEmptyDirection(draggedControl, host, relativePosition.Value))
                     {
-                        var offset = relativePosition.Value * new Point(host.GroupMatrixWidth * host.WidthMultiplier, host.GroupMatrixHeight * host.HeightMultiplier);
+                        var offset = relativePosition.Value * new Point(host.GroupMatrixWidth, host.GroupMatrixHeight);
 
                         return new Point(host.X + offset.X, host.Y + offset.Y);
                     }
@@ -202,14 +202,14 @@ namespace ClassicUO.Game.Managers
             if (xdistancescale > ydistancescale)
             {
                 if (draggedControl.X > host.X)
-                    return new Point(1, 0);
+                    return new Point(host.WidthMultiplier, 0);
                 else
                     return new Point(-1, 0);
             }
             else
             {
                 if (draggedControl.Y > host.Y)
-                    return new Point(0, 1);
+                    return new Point(0, host.HeightMultiplier);
                 else
                     return new Point(0, -1);
             }
@@ -268,6 +268,9 @@ namespace ClassicUO.Game.Managers
 
             if (control.Bounds.Right < host.Bounds.Left || control.Bounds.Left > host.Bounds.Right)
                 return false;
+
+            //if (control.Bounds.Top > (host.Bounds.Bottom - 1) || (control.Bounds.Bottom - 1) < host.Bounds.Top || (control.Bounds.Right - 1) < host.Bounds.Left || control.Bounds.Left > (host.Bounds.Right - 1))
+            //    return false;
 
             return true;
 
