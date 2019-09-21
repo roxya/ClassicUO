@@ -97,7 +97,7 @@ namespace ClassicUO.Game.Managers
                 {
                     if (this[host] == null)
                         this[host] = new AnchorGroup(host);
-
+                
                     if (this[host].IsEmptyDirection(draggedControl, host, relativePosition.Value))
                     {
                         this[host].AnchorControlAt(draggedControl, host, relativePosition.Value);
@@ -233,14 +233,26 @@ namespace ClassicUO.Game.Managers
 
         public AnchorableGump CheckOverlap(AnchorableGump control)
         {
+            AnchorableGump closestControl = null;
+            int closestDistance = 9999;
+
             var hosts = Engine.UI.Gumps.OfType<AnchorableGump>().Where(s => s.AnchorGroupName == control.AnchorGroupName);
             foreach (AnchorableGump host in hosts)
             {
                 if (IsOverlapping(control, host))
                 {
-                    GameActions.Print("Overlap!");
-                    return host;
+                    int dirtydistance = Math.Abs(control.X - host.X) + Math.Abs(control.Y - host.Y);
+                    if (dirtydistance < closestDistance)
+                    {
+                        closestDistance = dirtydistance;
+                        closestControl = host;
+                    }
                 }
+            }
+
+            if (closestControl != null)
+            {
+                return closestControl;
             }
 
             return null;
@@ -258,6 +270,8 @@ namespace ClassicUO.Game.Managers
                 return false;
 
             return true;
+
+            //return control.Bounds.Intersects(host.Bounds);
         }
 
         public class AnchorGroup
@@ -417,6 +431,27 @@ namespace ClassicUO.Game.Managers
                             AddControlToMatrix(targetX, targetY, control);
                         }
                     }
+                }
+            }
+
+            public void AnchorControl(AnchorableGump control)
+            {
+                var targetX = control.X;
+                var targetY = control.Y;
+
+                if (IsEmptyDirection(targetX, targetY))
+                {
+                    if (targetX < 0) // Create new column left
+                        ResizeMatrix(controlMatrix.GetLength(0) + control.WidthMultiplier, controlMatrix.GetLength(1), control.WidthMultiplier, 0);
+                    else if (targetX > controlMatrix.GetLength(0) - control.WidthMultiplier) // Create new column right
+                        ResizeMatrix(controlMatrix.GetLength(0) + control.WidthMultiplier, controlMatrix.GetLength(1), 0, 0);
+
+                    if (targetY < 0) //Create new row top
+                        ResizeMatrix(controlMatrix.GetLength(0), controlMatrix.GetLength(1) + control.HeightMultiplier, 0, control.HeightMultiplier);
+                    else if (targetY > controlMatrix.GetLength(1) - 1) // Create new row bottom
+                        ResizeMatrix(controlMatrix.GetLength(0), controlMatrix.GetLength(1) + control.HeightMultiplier, 0, 0);
+
+                    AddControlToMatrix(targetX, targetY, control);
                 }
             }
 

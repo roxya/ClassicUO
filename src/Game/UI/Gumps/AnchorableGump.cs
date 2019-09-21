@@ -30,6 +30,7 @@ namespace ClassicUO.Game.UI.Gumps
     {
         private GumpPic _lockGumpPic;
         private int _prevX, _prevY;
+        private AnchorableGump _anchorCandidate;
 
         public AnchorableGump(Serial local, Serial server) : base(local, server)
         {
@@ -63,13 +64,16 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMouseOver(int x, int y)
         {
-            if (Engine.UI.IsDragging)
+            // Am I using anchor candidate stuff? dunno
+            _anchorCandidate = null;
+            if (Engine.UI.IsDragging && Engine.UI.DraggingControl == this)
             {
                 AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this);
                 
                 if (ctrl != null)
                 {
                     Location = Engine.UI.AnchorManager.GetCandidateDropLocation(this, ctrl);
+                    _anchorCandidate = ctrl;
                 }
             }
 
@@ -80,9 +84,10 @@ namespace ClassicUO.Game.UI.Gumps
         {
             AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this);
 
-            if (ctrl != null)
+            //if (ctrl != null)
+            if (_anchorCandidate != null)
             {
-                Engine.UI.AnchorManager.DropControl(this, ctrl);
+                Engine.UI.AnchorManager.DropControl(this, _anchorCandidate);
             }
 
             base.OnDragEnd(x, y);
