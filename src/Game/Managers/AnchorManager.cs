@@ -204,14 +204,14 @@ namespace ClassicUO.Game.Managers
                 if (draggedControl.X > host.X)
                     return new Point(host.WidthMultiplier, 0);
                 else
-                    return new Point(-1, 0);
+                    return new Point(-draggedControl.WidthMultiplier, 0);
             }
             else
             {
                 if (draggedControl.Y > host.Y)
                     return new Point(0, host.HeightMultiplier);
                 else
-                    return new Point(0, -1);
+                    return new Point(0, -draggedControl.HeightMultiplier);
             }
 
             return null;

@@ -23,6 +23,7 @@
 
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Input;
+using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.UI.Gumps
@@ -73,13 +74,11 @@ namespace ClassicUO.Game.UI.Gumps
 
                 if (ctrl != null)
                 {
-                    Location = Engine.UI.AnchorManager.GetCandidateDropLocation(this, ctrl);
                     _anchorCandidate = ctrl;
                 }
-                else if(_anchorCandidate != null)
+                else
                 {
                     _anchorCandidate = null;
-                    Location = Mouse.Position - _dragStart;
                 }
             }
 
@@ -97,6 +96,7 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if (_anchorCandidate != null)
             {
+                Location = Engine.UI.AnchorManager.GetCandidateDropLocation(this, _anchorCandidate);
                 Engine.UI.AnchorManager.DropControl(this, _anchorCandidate);
                 _anchorCandidate = null;
             }
@@ -125,6 +125,18 @@ namespace ClassicUO.Game.UI.Gumps
                 _lockGumpPic.Dispose();
                 _lockGumpPic = null;
             }
+        }
+
+        public override bool Draw(UltimaBatcher2D batcher, int x, int y)
+        {
+            if (_anchorCandidate != null)
+            {
+                Point drawLoc = Engine.UI.AnchorManager.GetCandidateDropLocation(this, _anchorCandidate);
+                x = drawLoc.X;
+                y = drawLoc.Y;
+            }
+
+            return base.Draw(batcher, x, y);
         }
 
         protected override void CloseWithRightClick()
