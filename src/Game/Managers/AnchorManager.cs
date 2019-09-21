@@ -97,7 +97,7 @@ namespace ClassicUO.Game.Managers
                 {
                     if (this[host] == null)
                         this[host] = new AnchorGroup(host);
-                
+
                     if (this[host].IsEmptyDirection(draggedControl, host, relativePosition.Value))
                     {
                         this[host].AnchorControlAt(draggedControl, host, relativePosition.Value);
@@ -129,7 +129,7 @@ namespace ClassicUO.Game.Managers
 
         public AnchorableGump GetAnchorableControlOver(AnchorableGump draggedControl)
         {
-            return CheckOverlap(draggedControl);
+            return ClosestOverlappingControl(draggedControl);
         }
 
         public void DetachControl(AnchorableGump control)
@@ -213,8 +213,6 @@ namespace ClassicUO.Game.Managers
                 else
                     return new Point(0, -draggedControl.HeightMultiplier);
             }
-
-            return null;
         }
 
         private bool IsPointInPolygon(Vector2[] polygon, Vector2 point)
@@ -231,20 +229,20 @@ namespace ClassicUO.Game.Managers
             return isInside;
         }
 
-        public AnchorableGump CheckOverlap(AnchorableGump control)
+        public AnchorableGump ClosestOverlappingControl(AnchorableGump control)
         {
             AnchorableGump closestControl = null;
-            int closestDistance = 9999;
+            int closestDistance = 99999;
 
             var hosts = Engine.UI.Gumps.OfType<AnchorableGump>().Where(s => s.AnchorGroupName == control.AnchorGroupName);
             foreach (AnchorableGump host in hosts)
             {
                 if (IsOverlapping(control, host))
                 {
-                    int dirtydistance = Math.Abs(control.X - host.X) + Math.Abs(control.Y - host.Y);
-                    if (dirtydistance < closestDistance)
+                    int dirtyDistance = Math.Abs(control.X - host.X) + Math.Abs(control.Y - host.Y);
+                    if (dirtyDistance < closestDistance)
                     {
-                        closestDistance = dirtydistance;
+                        closestDistance = dirtyDistance;
                         closestControl = host;
                     }
                 }
@@ -269,12 +267,7 @@ namespace ClassicUO.Game.Managers
             if (control.Bounds.Right < host.Bounds.Left || control.Bounds.Left > host.Bounds.Right)
                 return false;
 
-            //if (control.Bounds.Top > (host.Bounds.Bottom - 1) || (control.Bounds.Bottom - 1) < host.Bounds.Top || (control.Bounds.Right - 1) < host.Bounds.Left || control.Bounds.Left > (host.Bounds.Right - 1))
-            //    return false;
-
             return true;
-
-            //return control.Bounds.Intersects(host.Bounds);
         }
 
         public class AnchorGroup
@@ -437,27 +430,6 @@ namespace ClassicUO.Game.Managers
                 }
             }
 
-            public void AnchorControl(AnchorableGump control)
-            {
-                var targetX = control.X;
-                var targetY = control.Y;
-
-                if (IsEmptyDirection(targetX, targetY))
-                {
-                    if (targetX < 0) // Create new column left
-                        ResizeMatrix(controlMatrix.GetLength(0) + control.WidthMultiplier, controlMatrix.GetLength(1), control.WidthMultiplier, 0);
-                    else if (targetX > controlMatrix.GetLength(0) - control.WidthMultiplier) // Create new column right
-                        ResizeMatrix(controlMatrix.GetLength(0) + control.WidthMultiplier, controlMatrix.GetLength(1), 0, 0);
-
-                    if (targetY < 0) //Create new row top
-                        ResizeMatrix(controlMatrix.GetLength(0), controlMatrix.GetLength(1) + control.HeightMultiplier, 0, control.HeightMultiplier);
-                    else if (targetY > controlMatrix.GetLength(1) - 1) // Create new row bottom
-                        ResizeMatrix(controlMatrix.GetLength(0), controlMatrix.GetLength(1) + control.HeightMultiplier, 0, 0);
-
-                    AddControlToMatrix(targetX, targetY, control);
-                }
-            }
-
             public bool IsEmptyDirection(AnchorableGump draggedControl, AnchorableGump host, Point relativePosition)
             {
                 Point? hostPosition = GetControlCoordinates(host);
@@ -538,7 +510,6 @@ namespace ClassicUO.Game.Managers
                     Console.WriteLine();
                 }
             }
-
         }
     }
 }

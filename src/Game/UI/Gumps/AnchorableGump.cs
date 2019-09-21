@@ -33,7 +33,6 @@ namespace ClassicUO.Game.UI.Gumps
         private GumpPic _lockGumpPic;
         private int _prevX, _prevY;
         private AnchorableGump _anchorCandidate;
-        private Point _dragStart;
 
         public AnchorableGump(Serial local, Serial server) : base(local, server)
         {
@@ -61,7 +60,6 @@ namespace ClassicUO.Game.UI.Gumps
             _prevX = X;
             _prevY = Y;
 
-
             base.OnMouseDown(x, y, button);
         }
 
@@ -83,13 +81,6 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             base.OnMouseOver(x, y);
-        }
-
-        protected override void OnDragBegin(int x, int y)
-        {
-            _dragStart = Mouse.Position - Location;
-
-            base.OnDragBegin(x, y);
         }
 
         protected override void OnDragEnd(int x, int y)
