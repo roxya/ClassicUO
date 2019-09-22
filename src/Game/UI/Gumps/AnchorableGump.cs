@@ -120,14 +120,26 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {
+            base.Draw(batcher, x, y);
+
             if (_anchorCandidate != null)
             {
                 Point drawLoc = Engine.UI.AnchorManager.GetCandidateDropLocation(this, _anchorCandidate);
-                x = drawLoc.X;
-                y = drawLoc.Y;
+                if (drawLoc != Location)
+                {
+                    //x = drawLoc.X;
+                    //y = drawLoc.Y;
+                    ResetHueVector();
+                    _hueVector.Z = 0.5f;
+                    batcher.Draw2D(Textures.GetTexture(Color.LightGray), drawLoc.X, drawLoc.Y, Width, Height, ref _hueVector);
+                    _hueVector.Z = 1f;
+                    ResetHueVector();
+                    batcher.DrawRectangle(Textures.GetTexture(Color.LightGray), drawLoc.X, drawLoc.Y, Width, Height, ref _hueVector);
+                    batcher.DrawRectangle(Textures.GetTexture(Color.LightGray), drawLoc.X + 1, drawLoc.Y + 1, Width - 2, Height - 2, ref _hueVector);
+                }
             }
-
-            return base.Draw(batcher, x, y);
+            //base.Draw(batcher, x, y);
+            return true;
         }
 
         protected override void CloseWithRightClick()
