@@ -46,7 +46,14 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMove()
         {
-            Engine.UI.AnchorManager[this]?.UpdateLocation(this, X - _prevX, Y - _prevY);
+            if (Keyboard.Alt)
+            {
+                Engine.UI.AnchorManager.DetachControl(this);
+            }
+            else
+            {
+                Engine.UI.AnchorManager[this]?.UpdateLocation(this, X - _prevX, Y - _prevY);
+            }
             _prevX = X;
             _prevY = Y;
 
@@ -99,16 +106,30 @@ namespace ClassicUO.Game.UI.Gumps
         {
             base.Update(totalMS, frameMS);
 
-            if (Keyboard.Alt && Engine.UI.AnchorManager[this] != null && _lockGumpPic == null)
+            if(_lockGumpPic != null && (Engine.UI.MouseOverControl == this || Engine.UI.MouseOverControl.RootParent == this))
             {
-                _lockGumpPic = new GumpPic(0, 0, 0x082C, 0);
-                _lockGumpPic.Update(totalMS, frameMS);
-                _lockGumpPic.AcceptMouseInput = true;
-                _lockGumpPic.X = Width - _lockGumpPic.Width;
-                _lockGumpPic.Y = 0;
-                _lockGumpPic.MouseUp += _lockGumpPic_MouseClick;
+                _lockGumpPic.Hue = 0x23;
+            }
 
-                Add(_lockGumpPic);
+            if (Keyboard.Alt && Engine.UI.AnchorManager[this] != null)
+            {
+                if (_lockGumpPic == null)
+                {
+                    _lockGumpPic = new GumpPic(0, 0, 0x082C, 0);
+                    _lockGumpPic.Update(totalMS, frameMS);
+                    _lockGumpPic.AcceptMouseInput = true;
+                    _lockGumpPic.X = Width - _lockGumpPic.Width;
+                    _lockGumpPic.Y = 0;
+                    _lockGumpPic.MouseUp += _lockGumpPic_MouseClick;
+
+                    Add(_lockGumpPic);
+                }
+
+                if (Engine.UI.MouseOverControl == this || Engine.UI.MouseOverControl.RootParent == this)
+                    _lockGumpPic.Hue = 0x23;
+                else
+                    _lockGumpPic.Hue = 0;
+
             }
             else if ((!Keyboard.Alt || Engine.UI.AnchorManager[this] == null) && _lockGumpPic != null)
             {
@@ -127,18 +148,16 @@ namespace ClassicUO.Game.UI.Gumps
                 Point drawLoc = Engine.UI.AnchorManager.GetCandidateDropLocation(this, _anchorCandidate);
                 if (drawLoc != Location)
                 {
-                    //x = drawLoc.X;
-                    //y = drawLoc.Y;
                     ResetHueVector();
                     _hueVector.Z = 0.5f;
-                    batcher.Draw2D(Textures.GetTexture(Color.LightGray), drawLoc.X, drawLoc.Y, Width, Height, ref _hueVector);
-                    _hueVector.Z = 1f;
-                    ResetHueVector();
-                    batcher.DrawRectangle(Textures.GetTexture(Color.LightGray), drawLoc.X, drawLoc.Y, Width, Height, ref _hueVector);
-                    batcher.DrawRectangle(Textures.GetTexture(Color.LightGray), drawLoc.X + 1, drawLoc.Y + 1, Width - 2, Height - 2, ref _hueVector);
+                    batcher.Draw2D(Textures.GetTexture(Color.Silver), drawLoc.X, drawLoc.Y, Width, Height, ref _hueVector);
+
+                    _hueVector.Z = 0;
+                    batcher.DrawRectangle(Textures.GetTexture(Color.Silver), drawLoc.X, drawLoc.Y, Width, Height, ref _hueVector);
+                    batcher.DrawRectangle(Textures.GetTexture(Color.Silver), drawLoc.X + 1, drawLoc.Y + 1, Width - 2, Height - 2, ref _hueVector);
                 }
             }
-            //base.Draw(batcher, x, y);
+
             return true;
         }
 
