@@ -106,11 +106,6 @@ namespace ClassicUO.Game.UI.Gumps
         {
             base.Update(totalMS, frameMS);
 
-            if(_lockGumpPic != null && (Engine.UI.MouseOverControl == this || Engine.UI.MouseOverControl.RootParent == this))
-            {
-                _lockGumpPic.Hue = 0x23;
-            }
-
             if (Keyboard.Alt && Engine.UI.AnchorManager[this] != null)
             {
                 if (_lockGumpPic == null)
@@ -125,7 +120,7 @@ namespace ClassicUO.Game.UI.Gumps
                     Add(_lockGumpPic);
                 }
 
-                if (Engine.UI.MouseOverControl == this || Engine.UI.MouseOverControl.RootParent == this)
+                if (Engine.UI.MouseOverControl != null && (Engine.UI.MouseOverControl == this || Engine.UI.MouseOverControl.RootParent == this))
                     _lockGumpPic.Hue = 0x23;
                 else
                     _lockGumpPic.Hue = 0;
@@ -146,6 +141,7 @@ namespace ClassicUO.Game.UI.Gumps
             if (_anchorCandidate != null)
             {
                 Point drawLoc = Engine.UI.AnchorManager.GetCandidateDropLocation(this, _anchorCandidate);
+
                 if (drawLoc != Location)
                 {
                     ResetHueVector();
