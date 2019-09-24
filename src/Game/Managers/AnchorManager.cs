@@ -127,7 +127,7 @@ namespace ClassicUO.Game.Managers
             return draggedControl.Location;
         }
 
-        public AnchorableGump GetAnchorableControlOver(AnchorableGump draggedControl)
+        public AnchorableGump GetAnchorableControlUnder(AnchorableGump draggedControl)
         {
             return ClosestOverlappingControl(draggedControl);
         }

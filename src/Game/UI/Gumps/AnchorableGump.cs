@@ -75,7 +75,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (Engine.UI.IsDragging && Engine.UI.DraggingControl == this)
             {
-                AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlOver(this);
+                AnchorableGump ctrl = Engine.UI.AnchorManager.GetAnchorableControlUnder(this);
 
                 if (ctrl != null)
                 {
@@ -121,7 +121,7 @@ namespace ClassicUO.Game.UI.Gumps
                 }
 
                 if (Engine.UI.MouseOverControl != null && (Engine.UI.MouseOverControl == this || Engine.UI.MouseOverControl.RootParent == this))
-                    _lockGumpPic.Hue = 0x23;
+                    _lockGumpPic.Hue = 34;
                 else
                     _lockGumpPic.Hue = 0;
 
