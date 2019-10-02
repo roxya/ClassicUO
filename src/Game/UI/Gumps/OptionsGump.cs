@@ -687,6 +687,23 @@ namespace ClassicUO.Game.UI.Gumps
 
                     Add(_macroControl, PAGE);
 
+                    nb.DragBegin += (sss, eee) =>
+                    {
+                        if (Engine.UI.IsDragging)
+                            return;
+
+                        MacroCollectionControl control = _macroControl.FindControls<MacroCollectionControl>().SingleOrDefault();
+
+                        if (control == null)
+                            return;
+
+                        Engine.UI.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == control.Macro)?.Dispose();
+
+                        MacroButtonGump macroButtonGump = new MacroButtonGump(control.Macro, Mouse.Position.X, Mouse.Position.Y);
+                        Engine.UI.Add(macroButtonGump);
+                        Engine.UI.AttemptDragControl(macroButtonGump, new Point(Mouse.Position.X + (macroButtonGump.Width >> 1), Mouse.Position.Y + (macroButtonGump.Height >> 1)), true);
+                    };
+
                     nb.MouseUp += (sss, eee) =>
                     {
                         _macroControl?.Dispose();

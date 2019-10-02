@@ -132,13 +132,13 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {
-            Vector3 hueVector = Vector3.Zero;
-            hueVector.Z = 0.15f;
+            ResetHueVector();
+            _hueVector.Z = 0.15f;
 
-            batcher.Draw2D(backgroundTexture, x, y, Width, Height, ref hueVector);
+            batcher.Draw2D(backgroundTexture, x, y, Width, Height, ref _hueVector);
 
-            hueVector.Z = 0;
-            batcher.DrawRectangle(Textures.GetTexture(Color.Gray), x, y, Width, Height, ref hueVector);
+            _hueVector.Z = 0;
+            batcher.DrawRectangle(Textures.GetTexture(Color.Gray), x, y, Width, Height, ref _hueVector);
 
             base.Draw(batcher, x, y);
             return true;
