@@ -28,6 +28,7 @@ using System.Linq;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Gumps;
+using ClassicUO.Input;
 using ClassicUO.Renderer;
 
 using SDL2;
@@ -53,10 +54,12 @@ namespace ClassicUO.Game.UI.Controls
             Add(new NiceButton(0, box.Height + 3, 50, 25, ButtonAction.Activate, "Add") {IsSelectable = false});
             Add(new NiceButton(52, box.Height + 3, 50, 25, ButtonAction.Activate, "Remove") {ButtonParameter = 1, IsSelectable = false});
 
+            Add(new NiceButton(0, box.Height + 30, 170, 25, ButtonAction.Activate, "+ Create macro button", 0, IO.Resources.TEXT_ALIGN_TYPE.TS_LEFT) { ButtonParameter = 2, IsSelectable = false });
+
 
             Add(_collection = new MacroCollectionControl(name, 280, 280)
             {
-                Y = box.Height + 25 + 10
+                Y = box.Height + 50 + 10
             });
 
             if (_collection.Macro.Key != SDL.SDL_Keycode.SDLK_UNKNOWN)
@@ -113,6 +116,13 @@ namespace ClassicUO.Game.UI.Controls
                 _collection.AddEmpty();
             else if (buttonID == 1) // remove
                 _collection.RemoveLast();
+            else if (buttonID == 2) // add macro button
+            {
+                Engine.UI.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == _collection.Macro)?.Dispose();
+
+                MacroButtonGump macroButtonGump = new MacroButtonGump(_collection.Macro, Mouse.Position.X, Mouse.Position.Y);
+                Engine.UI.Add(macroButtonGump);
+            }
         }
     }
 
