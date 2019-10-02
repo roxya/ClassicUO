@@ -21,6 +21,7 @@
 
 #endregion
 
+using System;
 using System.IO;
 
 using ClassicUO.Game.Managers;
@@ -100,8 +101,9 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMouseUp(int x, int y, MouseButton button)
         {
-            
-            if (Engine.Profile.Current.CastSpellsByOneClick && button == MouseButton.Left && !Keyboard.Alt)
+            Point offset = Mouse.LDroppedOffset;
+
+            if (Engine.Profile.Current.CastSpellsByOneClick && button == MouseButton.Left && !Keyboard.Alt && Math.Abs(offset.X) < 5 && Math.Abs(offset.Y) < 5)
             {
                 RunMacro();
             }
@@ -109,7 +111,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override bool OnMouseDoubleClick(int x, int y, MouseButton button)
         {
-            if (button != MouseButton.Left)
+            if (Engine.Profile.Current.CastSpellsByOneClick || button != MouseButton.Left)
                 return false;
 
             RunMacro();
@@ -124,9 +126,6 @@ namespace ClassicUO.Game.UI.Gumps
                 Engine.SceneManager.GetScene<GameScene>().Macros.SetMacroToExecute(_macro.FirstNode);
                 Engine.SceneManager.GetScene<GameScene>().Macros.WaitForTargetTimer = 0;
                 Engine.SceneManager.GetScene<GameScene>().Macros.Update();
-                
-                // Sending key to assistant - TODO maybe
-                //Plugin.ProcessHotkeys((int)_macro.Key, (int) MacroModKey(), true);
             }
         }
 
@@ -142,26 +141,6 @@ namespace ClassicUO.Game.UI.Gumps
 
             base.Draw(batcher, x, y);
             return true;
-        }
-
-        private SDL.SDL_Keymod MacroModKey()
-        {
-            if (_macro.Ctrl)
-            {
-                return SDL.SDL_Keymod.KMOD_CTRL;
-            }
-            else if (_macro.Alt)
-            {
-                return SDL.SDL_Keymod.KMOD_ALT;
-            }
-            else if (_macro.Shift)
-            {
-                return SDL.SDL_Keymod.KMOD_SHIFT;
-            }
-            else
-            {
-                return SDL.SDL_Keymod.KMOD_NONE;
-            }
         }
 
         public override void Save(BinaryWriter writer)
