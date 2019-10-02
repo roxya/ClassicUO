@@ -109,6 +109,9 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override bool OnMouseDoubleClick(int x, int y, MouseButton button)
         {
+            if (button != MouseButton.Left)
+                return false;
+
             RunMacro();
             
             return true;
@@ -122,7 +125,7 @@ namespace ClassicUO.Game.UI.Gumps
                 Engine.SceneManager.GetScene<GameScene>().Macros.WaitForTargetTimer = 0;
                 Engine.SceneManager.GetScene<GameScene>().Macros.Update();
                 
-                // Sending key to assistant - TODO
+                // Sending key to assistant - TODO maybe
                 //Plugin.ProcessHotkeys((int)_macro.Key, (int) MacroModKey(), true);
             }
         }
