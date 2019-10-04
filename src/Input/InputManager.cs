@@ -127,7 +127,13 @@ namespace ClassicUO.Input
 
                 case SDL_EventType.SDL_KEYDOWN:
 
-                    if (Plugin.ProcessHotkeys((int) e.key.keysym.sym, (int) e.key.keysym.mod, true))
+                    if ((e.key.keysym.sym == SDL_Keycode.SDLK_LCTRL
+                        || e.key.keysym.sym == SDL_Keycode.SDLK_LALT
+                        || e.key.keysym.sym == SDL_Keycode.SDLK_LSHIFT
+                        || e.key.keysym.sym == SDL_Keycode.SDLK_RCTRL
+                        || e.key.keysym.sym == SDL_Keycode.SDLK_RALT
+                        || e.key.keysym.sym == SDL_Keycode.SDLK_RSHIFT) 
+                        || Plugin.ProcessHotkeys((int) e.key.keysym.sym, (int) e.key.keysym.mod, true))
                     {
                         _ignoreNextTextInput = false;
                         Engine.SceneManager.CurrentScene.OnKeyDown(e.key);
