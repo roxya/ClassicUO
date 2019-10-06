@@ -81,7 +81,7 @@ namespace ClassicUO.Game.UI.Gumps
             label.Y = (Height >> 1) - (label.Height >> 1);
             Add(label);
 
-            backgroundTexture = Textures.GetTexture(Color.Black);
+            backgroundTexture = Textures.GetTexture(new Color(30, 30, 30));
         }
 
         protected override void OnMouseEnter(int x, int y)
@@ -94,7 +94,7 @@ namespace ClassicUO.Game.UI.Gumps
         protected override void OnMouseExit(int x, int y)
         {
             label.Hue = 1001;
-            backgroundTexture = Textures.GetTexture(Color.Black);
+            backgroundTexture = Textures.GetTexture(new Color(30, 30, 30));
             base.OnMouseExit(x, y);
         }
 
@@ -132,7 +132,7 @@ namespace ClassicUO.Game.UI.Gumps
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {
             ResetHueVector();
-            _hueVector.Z = 0.25f;
+            _hueVector.Z = 0.15f;
 
             batcher.Draw2D(backgroundTexture, x, y, Width, Height, ref _hueVector);
 
