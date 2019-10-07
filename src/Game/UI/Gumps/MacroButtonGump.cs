@@ -73,10 +73,7 @@ namespace ClassicUO.Game.UI.Gumps
             label = new Label(_macro.Name, true, 1001, Width, 255, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
             {
                 X = 0,
-                Y = 0,
                 Width = Width - 10,
-                AcceptMouseInput = true,
-                CanMove = true
             };
             label.Y = (Height >> 1) - (label.Height >> 1);
             Add(label);
@@ -132,7 +129,7 @@ namespace ClassicUO.Game.UI.Gumps
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {
             ResetHueVector();
-            _hueVector.Z = 0.15f;
+            _hueVector.Z = 0.1f;
 
             batcher.Draw2D(backgroundTexture, x, y, Width, Height, ref _hueVector);
 
