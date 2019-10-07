@@ -120,9 +120,10 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if (_macro != null)
             {
-                Engine.SceneManager.GetScene<GameScene>().Macros.SetMacroToExecute(_macro.FirstNode);
-                Engine.SceneManager.GetScene<GameScene>().Macros.WaitForTargetTimer = 0;
-                Engine.SceneManager.GetScene<GameScene>().Macros.Update();
+                GameScene gs = Engine.SceneManager.GetScene<GameScene>();
+                gs.Macros.SetMacroToExecute(_macro.FirstNode);
+                gs.Macros.WaitForTargetTimer = 0;
+                gs.Macros.Update();
             }
         }
 
