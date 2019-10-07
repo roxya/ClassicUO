@@ -149,10 +149,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 base.Save(writer);
                 writer.Write((byte) 0); //version
-                writer.Write((int) _macro.Key);
-                writer.Write(_macro.Ctrl);
-                writer.Write(_macro.Alt);
-                writer.Write(_macro.Shift);
+                writer.Write((string) _macro.Name);
             }
         }
 
@@ -161,12 +158,9 @@ namespace ClassicUO.Game.UI.Gumps
             base.Restore(reader);
 
             byte version = reader.ReadByte();
-            SDL.SDL_Keycode key = (SDL.SDL_Keycode) reader.ReadUInt32();
-            bool ctrl = reader.ReadBoolean();
-            bool alt = reader.ReadBoolean();
-            bool shift = reader.ReadBoolean();
+            string name = reader.ReadString();
 
-            Macro macro = Engine.SceneManager.GetScene<GameScene>().Macros.FindMacro(key, alt, ctrl, shift);
+            Macro macro = Engine.SceneManager.GetScene<GameScene>().Macros.FindMacro(name);
 
             if (macro != null)
             {

@@ -154,6 +154,20 @@ namespace ClassicUO.Game.Managers
 
             return obj;
         }
+        public Macro FindMacro(string name)
+        {
+            Macro obj = _firstNode;
+
+            while (obj != null)
+            {
+                if (obj.Name == name)
+                    break;
+
+                obj = obj.Right;
+            }
+
+            return obj;
+        }
 
         public void SetMacroToExecute(MacroObject macro)
         {
