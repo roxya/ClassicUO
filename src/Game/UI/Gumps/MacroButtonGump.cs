@@ -146,7 +146,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 base.Save(writer);
                 writer.Write((byte) 0); //version
-                writer.Write((string) _macro.Name);
+                writer.Write(_macro.Name);
             }
         }
 
