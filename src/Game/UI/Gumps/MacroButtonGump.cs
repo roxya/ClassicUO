@@ -71,8 +71,6 @@ namespace ClassicUO.Game.UI.Gumps
             Width = 88;
             Height = 44;
 
-            string keytext = "";
-
             if (_macro.Key != SDL.SDL_Keycode.SDLK_UNKNOWN)
             {
                 SDL.SDL_Keymod mod = SDL.SDL_Keymod.KMOD_NONE;
@@ -86,18 +84,17 @@ namespace ClassicUO.Game.UI.Gumps
                 if (_macro.Ctrl)
                     mod |= SDL.SDL_Keymod.KMOD_CTRL;
 
-                keytext = KeysTranslator.TryGetKey(_macro.Key, mod);
-            }
+                string keytext = KeysTranslator.TryGetKey(_macro.Key, mod);
+                SetTooltip(keytext);
 
-            Label hotkeylabel = new Label(keytext, true, 1001, Width, 2, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER);
-            Add(hotkeylabel);
+            }
 
             label = new Label(_macro.Name, true, 1001, Width, 255, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
             {
                 X = 0,
                 Width = Width - 10,
             };
-            label.Y = hotkeylabel.Height + (Height- hotkeylabel.Height >> 1) - (label.Height >> 1);
+            label.Y = (Height >> 1) - (label.Height >> 1);
             Add(label);
 
 
