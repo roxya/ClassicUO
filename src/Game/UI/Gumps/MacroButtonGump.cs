@@ -71,24 +71,6 @@ namespace ClassicUO.Game.UI.Gumps
             Width = 88;
             Height = 44;
 
-            if (_macro.Key != SDL.SDL_Keycode.SDLK_UNKNOWN)
-            {
-                SDL.SDL_Keymod mod = SDL.SDL_Keymod.KMOD_NONE;
-
-                if (_macro.Alt)
-                    mod |= SDL.SDL_Keymod.KMOD_ALT;
-
-                if (_macro.Shift)
-                    mod |= SDL.SDL_Keymod.KMOD_SHIFT;
-
-                if (_macro.Ctrl)
-                    mod |= SDL.SDL_Keymod.KMOD_CTRL;
-
-                string keytext = KeysTranslator.TryGetKey(_macro.Key, mod);
-                SetTooltip(keytext);
-
-            }
-
             label = new Label(_macro.Name, true, 1001, Width, 255, FontStyle.BlackBorder, TEXT_ALIGN_TYPE.TS_CENTER)
             {
                 X = 0,
