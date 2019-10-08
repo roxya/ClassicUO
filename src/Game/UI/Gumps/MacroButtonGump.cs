@@ -97,8 +97,6 @@ namespace ClassicUO.Game.UI.Gumps
             label.Y = (Height >> 1) - (label.Height >> 1);
             Add(label);
 
-
-
             backgroundTexture = Textures.GetTexture(new Color(30, 30, 30));
         }
 

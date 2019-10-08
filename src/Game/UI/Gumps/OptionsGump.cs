@@ -748,9 +748,8 @@ namespace ClassicUO.Game.UI.Gumps
                             if (control == null)
                                 return;
 
-                            Engine.SceneManager.GetScene<GameScene>().Macros.RemoveMacro(control.Macro);
-
                             Engine.UI.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == control.Macro)?.Dispose();
+                            Engine.SceneManager.GetScene<GameScene>().Macros.RemoveMacro(control.Macro);
                         }
 
                         if (rightArea.Children.OfType<ScrollAreaItem>().All(s => s.IsDisposed)) _macroControl?.Dispose();
