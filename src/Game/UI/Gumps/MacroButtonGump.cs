@@ -22,6 +22,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using ClassicUO.Game.Managers;
@@ -146,9 +147,24 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if(_macro != null)
             {
+                int macroid = 0;
+                List<Macro> macros = Engine.SceneManager.GetScene<GameScene>().Macros.GetAllMacros();
+
+                for (int i = 0; i < macros.Count; i++)
+                {
+                    if (macros[i] == _macro)
+                    {
+                        macroid = i;
+                        break;
+                    }
+                }
+
+                LocalSerial = (uint) macroid + 1000;
+
                 base.Save(writer);
                 writer.Write((byte) 0); //version
                 writer.Write(_macro.Name);
+                writer.Write(LocalSerial);
             }
         }
 
@@ -158,8 +174,10 @@ namespace ClassicUO.Game.UI.Gumps
 
             byte version = reader.ReadByte();
             string name = reader.ReadString();
+            LocalSerial = reader.ReadUInt32();
 
             Macro macro = Engine.SceneManager.GetScene<GameScene>().Macros.FindMacro(name);
+            
 
             if (macro != null)
             {
