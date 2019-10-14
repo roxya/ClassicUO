@@ -689,7 +689,9 @@ namespace ClassicUO.Game.UI.Gumps
 
                     nb.DragBegin += (sss, eee) =>
                     {
-                        if (Engine.UI.IsDragging)
+                        if (Engine.UI.IsDragging
+                            || nb.ScreenCoordinateX > Mouse.LDropPosition.X || nb.ScreenCoordinateX < Mouse.LDropPosition.X - nb.Width
+                            || nb.ScreenCoordinateY > Mouse.LDropPosition.Y || nb.ScreenCoordinateY + nb.Height < Mouse.LDropPosition.Y)
                             return;
 
                         MacroCollectionControl control = _macroControl.FindControls<MacroCollectionControl>().SingleOrDefault();
@@ -776,8 +778,10 @@ namespace ClassicUO.Game.UI.Gumps
 
                 nb.DragBegin += (sss, eee) =>
                 {
-                    if (Engine.UI.IsDragging)
-                        return;
+                    if (Engine.UI.IsDragging
+                        || nb.ScreenCoordinateX > Mouse.LDropPosition.X || nb.ScreenCoordinateX < Mouse.LDropPosition.X - nb.Width
+                        || nb.ScreenCoordinateY > Mouse.LDropPosition.Y || nb.ScreenCoordinateY + nb.Height < Mouse.LDropPosition.Y)
+                            return;
 
                     Engine.UI.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == macro)?.Dispose();
 
