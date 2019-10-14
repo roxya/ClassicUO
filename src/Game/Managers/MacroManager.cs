@@ -1139,7 +1139,7 @@ namespace ClassicUO.Game.Managers
             if (other == null)
                 return false;
 
-            return Key == other.Key && Alt == other.Alt && Ctrl == other.Ctrl && Shift == other.Shift;
+            return (Name == other.Name);
         }
 
         [JsonIgnore] public Macro Left { get; set; }

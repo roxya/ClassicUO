@@ -147,17 +147,7 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if(_macro != null)
             {
-                int macroid = 0;
-                List<Macro> macros = Engine.SceneManager.GetScene<GameScene>().Macros.GetAllMacros();
-
-                for (int i = 0; i < macros.Count; i++)
-                {
-                    if (macros[i] == _macro)
-                    {
-                        macroid = i;
-                        break;
-                    }
-                }
+                int macroid = Engine.SceneManager.GetScene<GameScene>().Macros.GetAllMacros().IndexOf(_macro);
 
                 LocalSerial = (uint) macroid + 1000;
 
@@ -177,7 +167,6 @@ namespace ClassicUO.Game.UI.Gumps
             LocalSerial = reader.ReadUInt32();
 
             Macro macro = Engine.SceneManager.GetScene<GameScene>().Macros.FindMacro(name);
-            
 
             if (macro != null)
             {
